@@ -7,7 +7,7 @@ namespace OrderProcessing;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var serviceProvider = new ServiceCollection()
             .AddSingleton<OrderDatabase>()
@@ -27,9 +27,9 @@ public class Program
         
         // Example: Simulate multiple threads processing orders
         Task[] tasks = new Task[3];
-        tasks[0] = Task.Run(() => { orderService.ProcessOrder(1); });
-        tasks[1] = Task.Run(() => { orderService.ProcessOrder(2); });
-        tasks[2] = Task.Run(() => { orderService.ProcessOrder(-1); });
+        tasks[0] = orderService.ProcessOrderAsync(1);
+        tasks[1] = orderService.ProcessOrderAsync(2);
+        tasks[2] = orderService.ProcessOrderAsync(-1);
         Task.WaitAll(tasks);
         
         Console.WriteLine("Processing complete.");

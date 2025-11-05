@@ -2,5 +2,5 @@
 
 public interface IOrderService
 {
-    Task ProcessOrder(int orderId);
+    Task ProcessOrderAsync(int orderId);
 }

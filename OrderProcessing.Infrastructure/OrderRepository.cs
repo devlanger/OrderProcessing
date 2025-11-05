@@ -4,8 +4,10 @@ namespace OrderProcessing.Infrastructure;
 
 public class OrderRepository(OrderDatabase database) : IOrderRepository
 {
-    public string GetOrder(int orderId)
+    public async Task<string> GetOrderAsync(int orderId)
     {
+        await Task.Delay(100);
+
         if(orderId <= 0)
             throw new ArgumentException("Invalid order id", nameof(orderId));
 
