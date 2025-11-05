@@ -9,6 +9,7 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        //Use DI Container
         var serviceProvider = new ServiceCollection()
             .AddSingleton<OrderDatabase>()
             .AddTransient<ILogger, ConsoleLogger>()
@@ -18,20 +19,28 @@ public class Program
 
         var databaseService = serviceProvider.GetService<OrderDatabase>();
         var orderService = serviceProvider.GetService<IOrderService>();
+        var orderRepository = serviceProvider.GetService<IOrderRepository>();
 
-        if (orderService is null || databaseService is null)
+        if (orderService is null || databaseService is null || orderRepository is null)
             throw new NullReferenceException("Database Service or OrderService is null.");
         
         databaseService.SeedData();
         Console.WriteLine("Order Processing System");
         
-        // Example: Simulate multiple threads processing orders
-        Task[] tasks = new Task[3];
+        var tasks = new Task[3];
         tasks[0] = orderService.ProcessOrderAsync(1);
         tasks[1] = orderService.ProcessOrderAsync(2);
         tasks[2] = orderService.ProcessOrderAsync(-1);
         await Task.WhenAll(tasks);
         
-        Console.WriteLine("Processing complete.");
+        orderRepository.AddOrder(new Order()
+        {
+            Id = 3, 
+            Description = "Printer"
+        });
+        
+        Console.WriteLine("All orders processed.");
+        
+        
     }
 }

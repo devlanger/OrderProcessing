@@ -4,6 +4,12 @@ namespace OrderProcessing.Infrastructure;
 
 public class OrderRepository(OrderDatabase database) : IOrderRepository
 {
+    public void AddOrder(Order order)
+    {
+        if(!database.Orders.TryAdd(order.Id, order))
+            throw new Exception("Duplicate order id");
+    }
+
     public async Task<string> GetOrderAsync(int orderId)
     {
         await Task.Delay(100);
