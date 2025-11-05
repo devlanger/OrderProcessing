@@ -1,4 +1,8 @@
-﻿public class ConsoleLogger : ILogger
+﻿using OrderProcessing.Abstractions;
+
+namespace OrderProcessing.Application;
+
+public class ConsoleLogger : ILogger
 {
     private static DateTimeOffset GetLogDateTime() => DateTimeOffset.UtcNow;
 

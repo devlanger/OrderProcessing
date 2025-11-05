@@ -1,21 +1,5 @@
-﻿// Interface for order service
-public interface IOrderService
-{
-    Task ProcessOrder(int orderId);
-}
-
-// Interface for order repository
-public interface IOrderRepository
-{
-    string GetOrder(int orderId);
-}
-
-// Sample Order class
-public class Order
-{
-    public int Id { get; set; }
-    public string Description { get; set; }
-}
+﻿// Sample Order class
+namespace OrderProcessing;
 
 class Program
 {
