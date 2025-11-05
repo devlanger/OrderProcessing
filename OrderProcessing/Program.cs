@@ -19,10 +19,10 @@ public class Program
         var databaseService = serviceProvider.GetService<OrderDatabase>();
         var orderService = serviceProvider.GetService<IOrderService>();
 
+        if (orderService is null || databaseService is null)
+            throw new NullReferenceException("Database Service or OrderService is null.");
+        
         databaseService.SeedData();
-        
-        // TODO: Demonstrate multi-threaded order processing
-        
         Console.WriteLine("Order Processing System");
         
         // Example: Simulate multiple threads processing orders
@@ -30,7 +30,7 @@ public class Program
         tasks[0] = orderService.ProcessOrderAsync(1);
         tasks[1] = orderService.ProcessOrderAsync(2);
         tasks[2] = orderService.ProcessOrderAsync(-1);
-        Task.WaitAll(tasks);
+        await Task.WhenAll(tasks);
         
         Console.WriteLine("Processing complete.");
     }
