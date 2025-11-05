@@ -12,14 +12,16 @@ public class Program
         var serviceProvider = new ServiceCollection()
             .AddSingleton<OrderDatabase>()
             .AddTransient<ILogger, ConsoleLogger>()
+            .AddTransient<IOrderRepository, OrderRepository>()
             .AddScoped<IOrderService, OrderService>()
             .BuildServiceProvider();
 
         var databaseService = serviceProvider.GetService<OrderDatabase>();
+        var orderService = serviceProvider.GetService<IOrderService>();
+
         databaseService.SeedData();
         
         // TODO: Demonstrate multi-threaded order processing
-        var orderService = serviceProvider.GetService<IOrderService>();
         
         Console.WriteLine("Order Processing System");
         
