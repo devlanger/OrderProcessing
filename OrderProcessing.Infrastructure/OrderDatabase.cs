@@ -4,17 +4,11 @@ namespace OrderProcessing.Infrastructure;
 
 public class OrderDatabase
 {
-    public ConcurrentDictionary<int, Order> Orders { get; set; }
+    public ConcurrentDictionary<int, Order> Orders { get; set; } = new ConcurrentDictionary<int, Order>();
 
     public void SeedData()
     {
-        Orders = new ConcurrentDictionary<int, Order>()
-        {
-            Values =
-            {
-                { new Order() { Id = 1, Description = "Laptop"} },
-                { new Order() { Id = 2, Description = "Phone"} }
-            }
-        };
+        Orders.TryAdd(1, new Order() { Id = 1, Description = "Laptop" });
+        Orders.TryAdd(1, new Order() { Id = 2, Description = "Phone" });
     }
 }
