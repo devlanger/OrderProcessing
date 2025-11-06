@@ -26,7 +26,11 @@ public class OrderServiceTests
         
         _orderRepositoryMock
             .Setup(x => x.GetOrderAsync(orderId))
-            .ReturnsAsync("Test description");
+            .ReturnsAsync(new Order()
+            {
+                Id = orderId,
+                Description = "Test Description",
+            });
         
         //Act
         await _sut.ProcessOrderAsync(orderId);

@@ -10,7 +10,7 @@ public class OrderRepository(OrderDatabase database) : IOrderRepository
             throw new Exception("Duplicate order id");
     }
 
-    public async Task<string> GetOrderAsync(int orderId)
+    public async Task<Order> GetOrderAsync(int orderId)
     {
         await Task.Delay(100);
 
@@ -18,7 +18,7 @@ public class OrderRepository(OrderDatabase database) : IOrderRepository
             throw new ArgumentException("Invalid order id", nameof(orderId));
 
         if (database.Orders.TryGetValue(orderId, out var order))
-            return order.Description;
+            return order;
 
         throw new KeyNotFoundException($"Order with id {orderId} not found");
     }
