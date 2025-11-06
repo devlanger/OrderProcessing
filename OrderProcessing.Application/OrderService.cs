@@ -6,16 +6,16 @@ public class OrderService(IOrderRepository orderRepository, ILogger logger) : IO
 {
     public async Task ProcessOrderAsync(int orderId)
     {
-        logger.LogInfo($"Start processing order: {orderId} ...");
+        logger.LogInfo($"Start processing order: {orderId}...");
 
         try
         {
             await orderRepository.GetOrderAsync(orderId);
+            logger.LogInfo($"Finished processing order: {orderId}.");
         }
         catch (Exception e)
         {
             logger.LogError($"Error while processing order: {orderId}", e);
-            throw;
         }
     }
 }

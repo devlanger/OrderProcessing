@@ -33,7 +33,7 @@ public class OrderServiceTests
         
         //Assert
         _orderRepositoryMock.Verify(x => x.GetOrderAsync(orderId), Times.Once);
-        _loggerMock.Verify(x => x.LogInfo(It.IsAny<string>()), Times.Once);
+        _loggerMock.Verify(x => x.LogInfo(It.IsAny<string>()), Times.Exactly(2));
         _loggerMock.VerifyNoOtherCalls();
     }
 
@@ -46,12 +46,12 @@ public class OrderServiceTests
             .ThrowsAsync(new ArgumentException());
         
         //Act
-        await Assert.ThrowsAsync<ArgumentException>(async () => await _sut.ProcessOrderAsync(orderId));
+        await _sut.ProcessOrderAsync(orderId);
         
         //Assert
         _orderRepositoryMock.Verify(x => x.GetOrderAsync(orderId), Times.Once);
         _loggerMock.Verify(x => x.LogInfo(It.IsAny<string>()), Times.Once);
-        _loggerMock.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once);
+        _loggerMock.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<ArgumentException>()), Times.Once);
     }
     
     
@@ -64,11 +64,11 @@ public class OrderServiceTests
             .ThrowsAsync(new KeyNotFoundException());
         
         //Act
-        await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _sut.ProcessOrderAsync(orderId));
+        await _sut.ProcessOrderAsync(orderId);
         
         //Assert
         _orderRepositoryMock.Verify(x => x.GetOrderAsync(orderId), Times.Once);
         _loggerMock.Verify(x => x.LogInfo(It.IsAny<string>()), Times.Once);
-        _loggerMock.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once);
+        _loggerMock.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<KeyNotFoundException>()), Times.Once);
     }
 }
