@@ -38,8 +38,9 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task ProcessOrderAsync_InvalidOrder_ShouldThrowAndLogError()
+    public async Task ProcessOrderAsync_InvalidOrder_ShouldThrowValidationAndLogError()
     {
+        //Arrange
         const int orderId = -1;
         _orderRepositoryMock
             .Setup(r => r.GetOrderAsync(orderId))
@@ -49,7 +50,7 @@ public class OrderServiceTests
         await _sut.ProcessOrderAsync(orderId);
         
         //Assert
-        _orderRepositoryMock.Verify(x => x.GetOrderAsync(orderId), Times.Once);
+        _orderRepositoryMock.Verify(x => x.GetOrderAsync(orderId), Times.Never);
         _loggerMock.Verify(x => x.LogInfo(It.IsAny<string>()), Times.Once);
         _loggerMock.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<ArgumentException>()), Times.Once);
     }
@@ -58,6 +59,7 @@ public class OrderServiceTests
     [Fact]
     public async Task ProcessOrderAsync_InvalidOrder_NotFound()
     {
+        //Arrange
         const int orderId = 999;
         _orderRepositoryMock
             .Setup(r => r.GetOrderAsync(orderId))
