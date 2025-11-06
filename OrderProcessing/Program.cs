@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using OrderProcessing.Abstractions;
-using OrderProcessing.Application;
+using OrderProcessing.Application.Extensions;
 using OrderProcessing.Core.Config;
 using OrderProcessing.Infrastructure;
+using OrderProcessing.Infrastructure.Extensions;
 
 namespace OrderProcessing;
 
@@ -24,37 +24,21 @@ public class Program
             {
                 configuration.GetSection("LoggingConfiguration").Bind(opt);
             })
-            .AddSingleton<OrderDatabase>()
-            .AddTransient<ILogger, ConsoleLogger>()
-            .AddTransient<IOrderRepository, OrderRepository>()
-            .AddScoped<IOrderService, OrderService>()
+            .AddApplicationServices()
+            .AddInfrastructureServices()
             .BuildServiceProvider();
-
         
         var databaseService = serviceProvider.GetService<OrderDatabase>();
         var orderService = serviceProvider.GetService<IOrderService>();
         var orderRepository = serviceProvider.GetService<IOrderRepository>();
+        var processingService = serviceProvider.GetService<IProcessingService>();
 
-        if (orderService is null || databaseService is null || orderRepository is null)
+        if (orderService is null || databaseService is null || orderRepository is null || processingService is null)
             throw new NullReferenceException("Database Service or OrderService is null.");
         
         databaseService.SeedData();
         Console.WriteLine("Order Processing System");
-        
-        var tasks = new Task[3];
-        tasks[0] = orderService.ProcessOrderAsync(1);
-        tasks[1] = orderService.ProcessOrderAsync(2);
-        tasks[2] = orderService.ProcessOrderAsync(-1);
-        await Task.WhenAll(tasks);
-        
-        orderRepository.AddOrder(new Order()
-        {
-            Id = 3, 
-            Description = "Printer"
-        });
-        
-        Console.WriteLine("All orders processed.");
-        
-        
+
+        await processingService.Process();
     }
 }
