@@ -10,4 +10,8 @@
       <ProjectReference Include="..\OrderProcessing.Abstractions\OrderProcessing.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Validation\" />
+    </ItemGroup>
+
 </Project>
