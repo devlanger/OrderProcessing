@@ -1,13 +1,18 @@
-﻿using OrderProcessing.Abstractions;
+﻿using Microsoft.Extensions.Options;
+using OrderProcessing.Abstractions;
+using OrderProcessing.Core.Config;
 
 namespace OrderProcessing.Application;
 
-public class ConsoleLogger : ILogger
+public class ConsoleLogger(IOptions<LoggingConfiguration> logConfig) : ILogger
 {
     private static DateTimeOffset GetLogDateTime() => DateTimeOffset.UtcNow;
 
     public void LogInfo(string message)
     {
+        if (logConfig.Value.LogLevel != "Info")
+            return;
+        
         Console.WriteLine($"[{GetLogDateTime()}] - {message}");
     }
 

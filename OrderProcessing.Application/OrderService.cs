@@ -11,9 +11,7 @@ public class OrderService(IOrderRepository orderRepository, ILogger logger) : IO
         try
         {
             if(!IsValid(orderId))
-            {
                 throw new ArgumentException("Invalid order provided.");
-            }
             
             await orderRepository.GetOrderAsync(orderId);
             logger.LogInfo($"Finished processing order: {orderId}.");
