@@ -17,7 +17,9 @@ Run through docker:
   - ``` docker run -i order-processing```
 
 ### Architecture diagram (text or mermaid)
+Clean Architecture: 
 
+Abstractions & Core -> Infrastructure -> Application -> Order Processing (Console)
 
 
 ### List of completed bonus tasks
